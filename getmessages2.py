@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import boto3
 from botocore.exceptions import ClientError
 import requests
@@ -38,8 +40,10 @@ def get_message():
         else:
             print("No message in the queue")
             exit(1)
-            
+
+
     # Handle any errors that may occur connecting to SQS
     except ClientError as e:
         print(e.response['Error']['Message'])
 
+print("hi") 
