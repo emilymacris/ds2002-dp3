@@ -20,7 +20,7 @@ def get_message():
                 AttributeNames=[
                     'All'
                 ],
-                MaxNumberOfMessages=i,
+                MaxNumberOfMessages=1,
                 MessageAttributeNames=[
                     'All'
                 ]
@@ -32,27 +32,39 @@ def get_message():
                 order = response['Messages'][0]['MessageAttributes']['order']['StringValue']
                 word = response['Messages'][0]['MessageAttributes']['word']['StringValue']
                 handle = response['Messages'][0]['ReceiptHandle']
-                dictionary[i]= [order, word, handle]
-                
+                # dictionary[i]= [order, word, handle]
 
+                message = {order: word}
+                dictionary.update(message)
+                
         # If there is no message in the queue, print a message and exit    
             else:
                 print("No message in the queue")
-                exit(1)
+                #exit(1)
+                continue
 
     # Handle any errors that may occur connecting to SQS
+        for x in range(0,10):        
+            for key, value in dictionary.items():
+                if value[0]==x:
+                    final_string = final_string + " " + value[1]
+        
     except ClientError as e:
-        print(e.response['Error']['Message'])
-    # for x in range(0,10):        
-    #         for key, value in dictionary.items():
-    #             if value[0]==x:
-    #                 final_string = final_string + " " + value[1]
-    #                 # delete 
-    # print(final_string)
+        # print(e.response['Error']['Message'])
+        print("ClientError")
+        
+    
+                    # delete 
+    print(dictionary)
+    # SORT through the dictionary
+
+    # sort the dict by key
+
+    # fetch out the values (another for loop)
+   # print(final_string)
+   # print("hi")
 
 get_message()
-
-
 
  # for i in range(0, 10):
         #     for key, value in dictionary.items():
