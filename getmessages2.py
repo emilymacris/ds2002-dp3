@@ -8,8 +8,8 @@ import json
 # Set up your SQS queue URL and boto3 client
 url = "https://sqs.us-east-1.amazonaws.com/440848399208/bdf7bz"
 sqs = boto3.client('sqs')
-
 dictionary = {}
+final_string = " " 
 def get_message():
     try:
         # Receive message from SQS queue. Each message has two MessageAttributes: order and word
@@ -32,26 +32,35 @@ def get_message():
                 order = response['Messages'][0]['MessageAttributes']['order']['StringValue']
                 word = response['Messages'][0]['MessageAttributes']['word']['StringValue']
                 handle = response['Messages'][0]['ReceiptHandle']
-                dictionary[i]= [word, order, handle]
+                dictionary[i]= [order, word, handle]
                 
-            
-        for i in range(0,10):
-            for key, value in dictionary.items():
-                if value[1]==i:
-                    print(value[0])
+
+        # If there is no message in the queue, print a message and exit    
+            else:
+                print("No message in the queue")
+                exit(1)
+
+    # Handle any errors that may occur connecting to SQS
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+    # for x in range(0,10):        
+    #         for key, value in dictionary.items():
+    #             if value[0]==x:
+    #                 final_string = final_string + " " + value[1]
+    #                 # delete 
+    # print(final_string)
+
+get_message()
+
+
+
+ # for i in range(0, 10):
+        #     for key, value in dictionary.items():
+        #         if value[1]==i:
+        #             print(value[0])
+
                     # then use the handle to delete the message
 
             # Print the message attributes - this is what you want to work with to reassemble the message
             # print(f"Order: {order}")
             # print(f"Word: {word}")
-
-        # If there is no message in the queue, print a message and exit    
-        else:
-            print("No message in the queue")
-            exit(1)
-
-    # Handle any errors that may occur connecting to SQS
-    except ClientError as e:
-        print(e.response['Error']['Message'])
-
-get_message()
