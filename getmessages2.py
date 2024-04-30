@@ -32,7 +32,6 @@ def get_message():
                 order = response['Messages'][0]['MessageAttributes']['order']['StringValue']
                 word = response['Messages'][0]['MessageAttributes']['word']['StringValue']
                 handle = response['Messages'][0]['ReceiptHandle']
-                # dictionary[i]= [order, word, handle]
 
                 message = {order: word}
                 dictionary.update(message)
@@ -44,10 +43,10 @@ def get_message():
                 continue
 
     # Handle any errors that may occur connecting to SQS
-        for x in range(0,10):        
-            for key, value in dictionary.items():
-                if value[0]==x:
-                    final_string = final_string + " " + value[1]
+        # for x in range(0,10):        
+        #     for key, value in dictionary.items():
+        #         if value[0]==x:
+        #             final_string = final_string + " " + value[1]
         
     except ClientError as e:
         # print(e.response['Error']['Message'])
@@ -56,6 +55,13 @@ def get_message():
     
                     # delete 
     print(dictionary)
+    sorted_dict = dict(sorted(dictionary.items()))
+    for value in sorted_dict.values():
+        final_string = final_string + " " + value
+    
+    
+
+
     # SORT through the dictionary
 
     # sort the dict by key
