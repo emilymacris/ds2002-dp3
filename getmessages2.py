@@ -9,7 +9,7 @@ import json
 url = "https://sqs.us-east-1.amazonaws.com/440848399208/bdf7bz"
 sqs = boto3.client('sqs')
 dictionary = {}
-final_string = " " 
+
 def get_message():
     try:
         # Receive message from SQS queue. Each message has two MessageAttributes: order and word
@@ -54,10 +54,16 @@ def get_message():
         
     
                     # delete 
-    print(dictionary)
+    
     sorted_dict = dict(sorted(dictionary.items()))
-    for value in sorted_dict.values():
-        final_string = final_string + " " + value
+    final_string = " ".join(sorted_dict.values())
+        
+    # final= " ".join(middle_list)
+    # print(final)
+    print(final)
+    
+get_message()        
+    
     
     
 
@@ -70,7 +76,7 @@ def get_message():
    # print(final_string)
    # print("hi")
 
-get_message()
+
 
  # for i in range(0, 10):
         #     for key, value in dictionary.items():
