@@ -9,7 +9,7 @@ import json
 url = "https://sqs.us-east-1.amazonaws.com/440848399208/bdf7bz"
 sqs = boto3.client('sqs')
 dictionary = {}
-
+list_receipt = []
 def get_message():
     try:
         # Receive message from SQS queue. Each message has two MessageAttributes: order and word
@@ -35,6 +35,7 @@ def get_message():
 
                 message = {order: word}
                 dictionary.update(message)
+                list_receipt.append(handle)
                 
         # If there is no message in the queue, print a message and exit    
             else:
@@ -42,25 +43,22 @@ def get_message():
                 #exit(1)
                 continue
 
-    # Handle any errors that may occur connecting to SQS
-        # for x in range(0,10):        
-        #     for key, value in dictionary.items():
-        #         if value[0]==x:
-        #             final_string = final_string + " " + value[1]
-        
+        #TO DELETE MESSAGES 
+        for receipts in list_receipt:
+            sqs.delete_message(
+            QueueUrl=url,
+            ReceiptHandle=receipts
+            )
     except ClientError as e:
         # print(e.response['Error']['Message'])
         print("ClientError")
-        
-    
-                    # delete 
     
     sorted_dict = dict(sorted(dictionary.items()))
     final_string = " ".join(sorted_dict.values())
-        
-    # final= " ".join(middle_list)
-    # print(final)
-    print(final)
+    
+
+    print(final_string)
+    
     
 get_message()        
     
@@ -76,6 +74,11 @@ get_message()
    # print(final_string)
    # print("hi")
 
+    # Handle any errors that may occur connecting to SQS
+        # for x in range(0,10):        
+        #     for key, value in dictionary.items():
+        #         if value[0]==x:
+        #             final_string = final_string + " " + value[1]
 
 
  # for i in range(0, 10):
